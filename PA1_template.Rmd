@@ -3,8 +3,8 @@ title: "Peer Assessment 1"
 output: html_document
 ---
 ## Loading and preprocessing the data
-First, I must load the dataset into R. Second, I convert the date variable from a factor variable into a date format.  This will come in handy later.
-``` {R, results = "hide"}
+First, I must load the dataset into R. Second, load the libraries I will use. Finally, I convert the date variable from a factor variable into a date format.  This will come in handy later.
+``` {R}
 data <- read.csv("activity.csv")
 library(plyr)
 library(Hmisc)
@@ -60,4 +60,4 @@ Next, we use aggregate create to a variable that finds the means for each interv
 dayComp <- aggregate(steps ~ interval + weekday, data=data2, mean)
 ggplot(dayComp, aes(interval, steps)) + geom_line() + facet_grid(weekday ~ .) +
     xlab("Interval") + ylab("Mean steps")
-``` 
+```
