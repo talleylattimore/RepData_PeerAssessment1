@@ -25,6 +25,10 @@ Next, we want to look at how many steps were taken during each 5-minute interval
 intervalSteps <- tapply(data$steps, data$interval, mean, na.rm=TRUE)
 plot(intervalSteps, type = "l")
 ```
+Next, we check to see which five-minute interval has the highest average steps and see that it is the time between 8:35 and 8:40 AM.
+``` {R}
+intervalSteps[which.max(intervalSteps)
+```
 ## Imputing missing values
 Next, I have to fill in all the missing values, or NAs. After summing up all the NAs, I create a second full dataset.  I decide to substitute the mean steps in each interval to replace the NAs. I believe that this provides the most accurate substitution. I duplicated my dataset and saved the new one as data2, then used ddply to input the new values. A quick check confirms that there are no NAs in data2.
 ``` {R}
