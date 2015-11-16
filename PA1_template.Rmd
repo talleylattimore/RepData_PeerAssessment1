@@ -4,7 +4,8 @@ output: html_document
 ---
 ## Loading and preprocessing the data
 First, I must load the dataset into R. Second, load the libraries I will use. Finally, I convert the date variable from a factor variable into a date format.  This will come in handy later.
-``` {R, echo = TRUE, eval = TRUE}
+``` {R, ECHO = TRUE, EVAL = TRUE}
+setwd("~/Fall 2015/Data Science Specialization/RepData")
 data <- read.csv("activity.csv")
 library(plyr)
 library(Hmisc)
@@ -27,7 +28,7 @@ plot(intervalSteps, type = "l")
 ```
 Next, we check to see which five-minute interval has the highest average steps and see that it is the time between 8:35 and 8:40 AM.
 ``` {R, echo = TRUE, eval = TRUE}
-intervalSteps[which.max(intervalSteps)
+intervalSteps[which.max(intervalSteps)]
 ```
 ## Imputing missing values
 Next, I have to fill in all the missing values, or NAs. After summing up all the NAs, I create a second full dataset.  I decide to substitute the mean steps in each interval to replace the NAs. I believe that this provides the most accurate substitution. I duplicated my dataset and saved the new one as data2, then used ddply to input the new values. A quick check confirms that there are no NAs in data2.
