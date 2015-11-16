@@ -4,7 +4,7 @@ output: html_document
 ---
 ## Loading and preprocessing the data
 First, I must load the dataset into R. Second, load the libraries I will use. Finally, I convert the date variable from a factor variable into a date format.  This will come in handy later.
-``` {R, echo = TRUE}
+``` {R, echo = TRUE, eval = TRUE}
 data <- read.csv("activity.csv")
 library(plyr)
 library(Hmisc)
@@ -13,7 +13,7 @@ data$date <- as.Date(data$date)
 ```
 ## What is mean total number of steps taken per day?
 In order to calculate the average steps taken in a day, I create dataset containing the sum of all intervals for each day.  From here it is easy to calculate the mean and median steps taken per day and create a histogram.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 daySteps <- tapply(data$steps, data$date, sum, na.rm=TRUE)
 hist(daySteps, breaks = 20)
 mean(daySteps)
@@ -21,24 +21,24 @@ median(daySteps)
 ```
 ## What is the average daily activity pattern?
 Next, we want to look at how many steps were taken during each 5-minute interval.  To do this we create a dataset containing the mean of each interval over all the days and then plot it using a line graph.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 intervalSteps <- tapply(data$steps, data$interval, mean, na.rm=TRUE)
 plot(intervalSteps, type = "l")
 ```
 Next, we check to see which five-minute interval has the highest average steps and see that it is the time between 8:35 and 8:40 AM.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 intervalSteps[which.max(intervalSteps)
 ```
 ## Imputing missing values
 Next, I have to fill in all the missing values, or NAs. After summing up all the NAs, I create a second full dataset.  I decide to substitute the mean steps in each interval to replace the NAs. I believe that this provides the most accurate substitution. I duplicated my dataset and saved the new one as data2, then used ddply to input the new values. A quick check confirms that there are no NAs in data2.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 sum(is.na(data$steps))
 data2 <- data
 data2 <- ddply(data2, ~ interval, transform, steps = impute(steps, mean))
 sum(is.na(data2$steps))
 ```
 The mean steps in the new, complete dataset, 9504 steps, is larger than the original, 9354 steps, which makes sense because previously missing values have been replaced.  The median remains the same, 10395.  The histogram of steps in each day is largely the same, except that the new one has far less days with 0 steps.  This makes sense because there were a number of days that had NA for all the intervals.  These were all in the 0 steps bin, but were moved up when the NAs were substituted.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 daySteps2 <- tapply(data2$steps, data2$date, sum, na.rm=TRUE)
 mean(daySteps2)
 median(daySteps2)
@@ -46,7 +46,7 @@ hist(daySteps2, breaks = 20)
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
 To accomplish this we first much create a variable that determines if a date is a weekday or weekend.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 weekday <- function(date) {
   # First we create a variable that uses the date to determine the day of the week (remember we converted data$date into a data format earlier).
   day <- weekdays(date)
@@ -60,7 +60,7 @@ weekday <- function(date) {
 data2$weekday <- sapply(data2$date, FUN=weekday)
 ```
 Next, we use aggregate create to a variable that finds the means for each interval on the weekday and weekend. Finally, we use ggplot to create a panel of charts showing a time-series graph of mean steps per interval.  Separate charts are created for weekdays and the weekend. The charts showing that there is a high spike in steps around the morning rush hour (6:00-9:00), before it stays steady for the rest of the day.  A weekends, however, there is a much smaller spike and it does not begin till after 8:00, meanwhile it is higher throughout the remainder of the day.
-``` {R}
+``` {R, echo = TRUE, eval = TRUE}
 dayComp <- aggregate(steps ~ interval + weekday, data=data2, mean)
 ggplot(dayComp, aes(interval, steps)) + geom_line() + facet_grid(weekday ~ .) +
     xlab("Interval") + ylab("Mean steps")
