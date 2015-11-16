@@ -4,7 +4,7 @@ output: html_document
 ---
 ## Loading and preprocessing the data
 First, I must load the dataset into R. Second, load the libraries I will use. Finally, I convert the date variable from a factor variable into a date format.  This will come in handy later.
-``` {R}
+``` {R, echo = TRUE}
 data <- read.csv("activity.csv")
 library(plyr)
 library(Hmisc)
